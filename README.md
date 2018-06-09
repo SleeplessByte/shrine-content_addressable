@@ -55,7 +55,7 @@ a git tag for the version, push git commits and tags, and push the `.gem` file t
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/SleeplessByte/shrine-configurable_storage.
+Bug reports and pull requests are welcome on GitHub at [SleeplessByte/shrine-configurable_storage](https://github.com/SleeplessByte/shrine-configurable_storage).
 This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to
 the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
@@ -66,4 +66,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 ## Code of Conduct
 
 Everyone interacting in the Shrine::ConfigurableStorage project’s codebases, issue trackers, chat rooms and mailing
-lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/shrine-configurable_storage/blob/master/CODE_OF_CONDUCT.md).
+lists is expected to follow the [code of conduct](https://github.com/SleeplessByte/shrine-configurable_storage/blob/master/CODE_OF_CONDUCT.md).
