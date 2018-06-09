@@ -1,0 +1,11 @@
+AllCops:
+  Include:
+    - '**/Rakefile'
+    - 'lib/**/*.rb'
+  Exclude:
+    - 'Gemfile'
+    - 'bin/**/*'
+  TargetRubyVersion: 2.3
+
+Style/EndOfLine:
+  EnforcedStyle: lf
