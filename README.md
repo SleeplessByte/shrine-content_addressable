@@ -44,6 +44,44 @@ correctly supported by the `signature` plugin, and has a `multihash` code, add t
 plugin :content_addressable, hash: :blake2_b, multihash: 'blake2b'
 ```
 
+### ContentAddressable IO
+Since a content-addressable stored file is the same across whichever storage, it *MUST* not matter what storage the file
+is accessed from when it comes to reading. A wrapper is provided so files can be looked up by their content-addressable
+id / hash, instead of a data hash (default for Shrine).
+
+```Ruby
+require 'content_addressable_file'
+
+# You currently need to register the storages
+ContentAddressableFile.register_storage(lookup, lookup, lookup)
+
+file = ContentAddressableFile.new(content_addressable_hash)
+
+# => file methods like open, rewind, read, close and eof? are available
+# => file.url gives the first url that exists
+# => file.exists? is true if it exists in any storage
+# => file.delete attempts to delete it from ALL storages 
+```
+
+To reset known storages use:
+```Ruby
+ContentAddressableFile.reset
+```
+
+In a later version registration might be automatic. A lookup storage needs to respond to:
+```Ruby
+lookup = Shrine::Storage::Memory.new
+id = content_addressable_hash
+
+lookup.open(id) # IO.open
+lookup.exists?(id) # true if storage has it (and can open)
+
+# optional
+lookup.url(id) # url to the io (only if storage has it)
+lookup.delete(id) # delete from storage
+lookup.download(id) # download the io
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can
