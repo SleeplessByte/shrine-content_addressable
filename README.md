@@ -1,7 +1,8 @@
-# shrine-content_addressable
+# Shrine::Plugins::ContentAddressable
 [![Build Status](https://travis-ci.com/SleeplessByte/shrine-content_addressable.svg?branch=master)](https://travis-ci.com/SleeplessByte/content_addressable)
 [![Gem Version](https://badge.fury.io/rb/shrine-content_addressable.svg)](https://badge.fury.io/rb/shrine-content_addressable)
-[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
+[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT) 
+[![Maintainability](https://api.codeclimate.com/v1/badges/b85f82e8889ad5546f82/maintainability)](https://codeclimate.com/github/SleeplessByte/resumable_job/maintainability)
 
 Generate content addressable locations for shrine uploads.
 
