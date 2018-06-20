@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'English'
+require 'multihashes'
 require 'forwardable'
 
 class ReadOnlyStorage
@@ -55,6 +56,29 @@ class ContentAddressableFile
   #
   def initialize(id)
     self.id = id
+  end
+
+  # Tries to decode the multihash. This is a good check to see if the given id
+  # is actually a content-addressable, but also easy to "fake", as the only way
+  # to be certain that the id is a content addressable is actually getting the
+  # file and hashing it again.
+  def decode
+    @decode ||= Multihashes.decode id
+  end
+
+  # The #deocode digest as a byte array
+  def digest
+    decode[:digest]
+  end
+
+  # The #decode digest length
+  def digest_length
+    decode[:length]
+  end
+
+  # The #decode hash function
+  def digest_hash_function
+    decode[:hash_function]
   end
 
   # Calls `#open` on the storages to open the uploaded file for reading.

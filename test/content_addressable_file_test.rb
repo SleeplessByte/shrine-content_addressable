@@ -2,6 +2,9 @@
 
 require_relative './test_helper'
 
+require 'digest'
+require 'multihashes'
+
 require 'shrine'
 require 'shrine/plugins/configurable_storage'
 require 'shrine/plugins/signature'
@@ -179,5 +182,23 @@ class ContentAddressableFileTest < Minitest::Test
   def test_equality
     assert_equal ContentAddressableFile.new('foo'),
                  ContentAddressableFile.new('foo')
+  end
+
+  def test_decode_is_not_a_hash
+    assert_raises do
+      ContentAddressableFile.new('foo').decode
+    end
+  end
+
+  def test_digest
+    digest = Digest::MD5.digest('test content')
+    file = ContentAddressableFile.new(Multihashes.encode(digest, 'md5'))
+    assert_equal digest, file.digest
+  end
+
+  def test_digest_hash_function
+    digest = Digest::MD5.digest('test content')
+    file = ContentAddressableFile.new(Multihashes.encode(digest, 'md5'))
+    assert_equal 'md5', file.digest_hash_function
   end
 end
