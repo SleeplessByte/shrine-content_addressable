@@ -1,17 +1,45 @@
 # frozen_string_literal: true
 
 require 'English'
+require 'forwardable'
+
+class ReadOnlyStorage
+  extend Forwardable
+  def_delegators :@storage, :exists?, :download, :url
+
+  def initialize(storage)
+    @storage = storage
+  end
+end
 
 class ContentAddressableFile
 
   class << self
     attr_accessor :storages
 
+    # Registers a storage to be used with content-addressable file. All shrine
+    # storages are supported by default, as is any duck type that responds to
+    # Storage#open(content-addressable-hash) and Storage#exists?(hash).
+    #
+    # Additional functionality needs Storage#url(hash), Storage#delete(hash)
+    # and Storage#download(hash).
+    #
+    # When a content-addressable file is deleted, it's deleted from all
+    # registered storages. use #register_read_only_storage to prevent deletion.
+    #
     def register_storage(*storage)
       self.storages = Array(storages).push(*storage)
       self
     end
 
+    # Same as #register_storage, but only forwards read only methods.
+    def register_read_only_storage(*storage)
+      read_only = Array(storage).map { |s| ReadOnlyStorage.new(s) }
+      self.storages = Array(storages).push(*read_only)
+      self
+    end
+
+    # Removes all registered storages
     def reset
       self.storages = []
       self
@@ -20,6 +48,11 @@ class ContentAddressableFile
 
   attr_reader :id
 
+  # Creates a new content-addressable file wrapper that uses the given id as
+  # content hash, assuming that it is a content addressable multihash
+  #
+  # @param [String] id the multihash that is the content-addressable
+  #
   def initialize(id)
     self.id = id
   end
@@ -33,6 +66,8 @@ class ContentAddressableFile
   # the return value of the method is the block return value.
   #
   # If no block is given, the opened IO object is returned.
+  #
+  # @example
   #
   #     content_addressable.open #=> IO object returned by the storage
   #     content_addressable.read #=> "..."
