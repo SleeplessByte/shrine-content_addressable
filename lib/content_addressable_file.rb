@@ -240,7 +240,7 @@ class ContentAddressableFile
   # Returns an opened IO object for the uploaded file by calling `#open`
   # on the storage.
   def io
-    @io ||= safe_open(id)
+    @io ||= pin_storage(:open, id)
   end
 
   # rubocop:disable Style/RescueModifier
