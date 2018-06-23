@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.3.1
+
+- Fix `ContentAddressableFile#open` without a block
+
 ## 0.3.0
 
-- Add read only (no mass deletion) for `ContentAddressableFile`.
+- Add read only (no mass deletion) for `ContentAddressableFile`
 - Add `#digest` and related functionality
 
 ## 0.2.0
