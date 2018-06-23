@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+- Matching interfaces for `ContentAddressableFile` and `UploadedFile` with this plugin
+- Add `#content_addressable` to get the content addressable multi hash
+- Add equality between a content addressable uploaded file and a content addressable file with the same hash.
+
 ## 0.3.1
 
 - Fix `ContentAddressableFile#open` without a block
