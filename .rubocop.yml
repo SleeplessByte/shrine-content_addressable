@@ -9,3 +9,6 @@ AllCops:
 
 Style/EndOfLine:
   EnforcedStyle: lf
+
+Naming/UncommunicativeMethodParamName:
+  AllowedNames: [_, x, y, z, i, io, id]

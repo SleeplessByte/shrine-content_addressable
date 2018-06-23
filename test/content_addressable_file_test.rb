@@ -116,7 +116,7 @@ class ContentAddressableFileTest < Minitest::Test
 
     [MyUploader.new(:cache), MyUploader.new(:store)].each do |uploader|
       uploaded_file = uploader.upload(StringIO.new('test content'))
-      content_addressable = ContentAddressableFile.new(uploaded_file.id)
+      content_addressable = ContentAddressableFile.new(uploaded_file.content_addressable)
       assert_resolved?(content_addressable)
     end
 
@@ -192,13 +192,13 @@ class ContentAddressableFileTest < Minitest::Test
 
   def test_digest
     digest = Digest::MD5.digest('test content')
-    file = ContentAddressableFile.new(Multihashes.encode(digest, 'md5'))
+    file = ContentAddressableFile.new(Multihashes.encode(digest, 'md5').unpack('H*').first)
     assert_equal digest, file.digest
   end
 
   def test_digest_hash_function
     digest = Digest::MD5.digest('test content')
-    file = ContentAddressableFile.new(Multihashes.encode(digest, 'md5'))
+    file = ContentAddressableFile.new(Multihashes.encode(digest, 'md5').unpack('H*').first)
     assert_equal 'md5', file.digest_hash_function
   end
 end

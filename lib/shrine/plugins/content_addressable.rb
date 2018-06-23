@@ -6,6 +6,8 @@ require 'shrine/plugins/signature'
 require 'multihashes'
 require 'digest'
 
+require 'shrine/plugins/content_addressable/file_methods'
+
 class Shrine
   module Plugins
     ##
@@ -75,7 +77,9 @@ class Shrine
         end
 
         def generate_location(io, _)
-          [opts[:content_addressable_prefix], content_addressable_hex(io)].compact.join('/')
+          [opts[:content_addressable_prefix], content_addressable_hex(io)]
+            .compact
+            .join('/')
         end
       end
     end

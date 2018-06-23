@@ -45,6 +45,19 @@ correctly supported by the `signature` plugin, and has a `multihash` code, add t
 plugin :content_addressable, hash: :blake2_b, multihash: 'blake2b'
 ```
 
+Your uploaded files will be extended with some multihash capability:
+
+```Ruby
+uploader = Uploader.new(:cache)
+uploaded_file = uploader.upload(my_file)
+
+uploaded_file.content_addressable # => the content addressable hash, regardless of location
+uploaded_file.decode # => the decoded multihash
+uploaded_file.digest # => the decoded digest (in bytes. Use .unpack('H*') to turn into hex)
+uploaded_file.digest_function # => the digest function used to create the multihash
+uploaded_file.to_content_addressable! # => ContentAddressableFile, and auto registers the storage
+```
+
 ### ContentAddressable IO
 Since a content-addressable stored file is the same across whichever storage, it *MUST* not matter what storage the file
 is accessed from when it comes to reading. A wrapper is provided so files can be looked up by their content-addressable
@@ -53,14 +66,15 @@ id / hash, instead of a data hash (default for Shrine).
 ```Ruby
 require 'content_addressable_file'
 
-# You currently need to register the storages
+# You currently need to register the storages, unless you use uploaded_file.to_content_addressable!
 ContentAddressableFile.register_storage(lookup, lookup, lookup)
 
-# You can disallow deletion using
+# You can disallow deletion
 ContentAddressableFile.register_read_only_storage(lookup, lookup, lookup) 
 
 file = ContentAddressableFile.new(content_addressable_hash)
 
+# Shares the interface with UploadedFile
 # => file methods like open, rewind, read, close and eof? are available
 # => file.url gives the first url that exists
 # => file.exists? is true if it exists in any storage
@@ -72,19 +86,24 @@ To reset known storages use:
 ContentAddressableFile.reset
 ```
 
-In a later version registration might be automatic. A lookup storage needs to respond to:
+Registration is only automatic when using `#to_content_addressable!`. Do not rely on that behaviour
+if you're not always uploading files, but trying to retrieve them.
+
+A lookup storage needs to respond to:
 ```Ruby
 lookup = Shrine::Storage::Memory.new
-id = content_addressable_hash
+content_addressable = content_addressable_hash
 
-lookup.open(id) # IO.open
-lookup.exists?(id) # true if storage has it (and can open)
+lookup.open(content_addressable) # IO.open
+lookup.exists?(content_addressable) # true if storage has it (and can open)
 
 # optional
-lookup.url(id) # url to the io (only if storage has it)
-lookup.delete(id) # delete from storage
-lookup.download(id) # download the io
+lookup.url(content_addressable) # url to the io (only if storage has it)
+lookup.delete(content_addressable) # delete from storage
+lookup.download(content_addressable) # download the io
 ```
+
+Note that you input the hash, and not some arbitrary path.
 
 ## Development
 

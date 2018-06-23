@@ -69,6 +69,43 @@ class Shrine
         assert_equal '/bucket/d5100777f94b4cf1c5fa677ca69639ac6c72',
                      cached_file.id
       end
+
+      def test_is_a_content_addressable_file_like
+        content = 'My content to address'
+
+        cache_uploader = MyUploader.new(:cache)
+        cached_file = cache_uploader.upload(StringIO.new(content))
+        assert_equal 'sha2-256', cached_file.digest_hash_function
+        assert_equal Digest(:SHA256).digest(content), cached_file.digest
+      end
+
+      def test_passes_content_addressable_equality
+        content = 'My content to address'
+        cache_uploader = MyUploader.new(:cache)
+        cached_file = cache_uploader.upload(StringIO.new(content))
+
+        assert_equal ContentAddressableFile.new(cached_file.content_addressable), cached_file
+      end
+
+      def test_to_content_addressable
+        content = 'My content to address'
+        cache_uploader = MyUploader.new(:cache)
+        cached_file = cache_uploader.upload(StringIO.new(content))
+
+        content_addressable_file = cached_file.to_content_addressable!
+        assert_kind_of(ContentAddressableFile, content_addressable_file)
+        assert_equal cached_file, content_addressable_file
+        assert_equal cached_file.content_addressable, content_addressable_file.content_addressable
+
+        # Test deletion propagation
+        assert cached_file.storage.exists?(cached_file.id)
+        assert content_addressable_file.exists?, 'Expected storage to be registered implicitly'
+
+        content_addressable_file.delete
+
+        refute content_addressable_file.exists?
+        refute cached_file.storage.exists?(cached_file.id)
+      end
     end
   end
 end
