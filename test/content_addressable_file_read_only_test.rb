@@ -74,7 +74,7 @@ class ContentAddressableFileReadOnlyTest < Minitest::Test
 
     [MyUploader.new(:read_only), MyUploader.new(:read_write)].each do |uploader|
       uploaded_file = uploader.upload(StringIO.new('test content'))
-      content_addressable = ContentAddressableFile.new(uploaded_file.id)
+      content_addressable = ContentAddressableFile.new(uploaded_file.content_addressable)
       assert_resolved?(content_addressable)
     end
 
