@@ -1,8 +1,8 @@
 # Shrine::Plugins::ContentAddressable
-[![Build Status](https://travis-ci.com/SleeplessByte/shrine-content_addressable.svg?branch=master)](https://travis-ci.com/SleeplessByte/content_addressable)
+[![Build Status](https://travis-ci.com/SleeplessByte/shrine-content_addressable.svg?branch=master)](https://travis-ci.com/SleeplessByte/shrine-content_addressable)
 [![Gem Version](https://badge.fury.io/rb/shrine-content_addressable.svg)](https://badge.fury.io/rb/shrine-content_addressable)
-[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT) 
-[![Maintainability](https://api.codeclimate.com/v1/badges/b85f82e8889ad5546f82/maintainability)](https://codeclimate.com/github/SleeplessByte/resumable_job/maintainability)
+[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
+[![Maintainability](https://api.codeclimate.com/v1/badges/69fd01f1de440703eb7d/maintainability)](https://codeclimate.com/github/SleeplessByte/shrine-content_addressable/maintainability)
 
 Generate content addressable locations for shrine uploads.
 
@@ -70,7 +70,7 @@ require 'content_addressable_file'
 ContentAddressableFile.register_storage(lookup, lookup, lookup)
 
 # You can disallow deletion
-ContentAddressableFile.register_read_only_storage(lookup, lookup, lookup) 
+ContentAddressableFile.register_read_only_storage(lookup, lookup, lookup)
 
 file = ContentAddressableFile.new(content_addressable_hash)
 
@@ -78,7 +78,7 @@ file = ContentAddressableFile.new(content_addressable_hash)
 # => file methods like open, rewind, read, close and eof? are available
 # => file.url gives the first url that exists
 # => file.exists? is true if it exists in any storage
-# => file.delete attempts to delete it from ALL storages 
+# => file.delete attempts to delete it from ALL storages
 ```
 
 To reset known storages use:
